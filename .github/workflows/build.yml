@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get install -y build-essential autoconf libtool libssl-dev libpcre3-dev libc-ares-dev libev-dev automake
+      - name: autogen
+        run: ./autogen.sh
+      - name: configure
+        run: ./configure
+      - name: build
+        run: make -j$(nproc)
