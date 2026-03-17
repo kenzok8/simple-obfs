@@ -1,10 +1,10 @@
 # Contributor: Max Lv <max.c.lv@gmail.com>
 # Maintainer: Max Lv <max.c.lv@gmail.com>
 pkgname=simple-obfs
-pkgver=0.0.5
+pkgver=0.0.9
 pkgrel=0
 pkgdesc="Simple-obfs is a simple obfusacting tool, designed as plugin server of shadowsocks."
-url="https://github.com/shadowsocks/simple-obfs"
+url="https://github.com/kenzok8/simple-obfs"
 arch="all"
 license="GPLv3+"
 makedepends="autoconf automake libtool linux-headers libev-dev asciidoc xmlto"
@@ -16,7 +16,6 @@ prepare() {
 	git clone "$url"
 	cd "$builddir"
 	git checkout "v$pkgver"
-	git submodule update --init --recursive
 }
 
 build() {
