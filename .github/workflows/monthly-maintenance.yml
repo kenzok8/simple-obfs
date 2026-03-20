@@ -1,0 +1,29 @@
+name: monthly-maintenance
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 4 1 * *'
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential autoconf libtool libssl-dev libpcre3-dev libc-ares-dev libev-dev automake
+
+      - name: Build
+        run: |
+          ./autogen.sh
+          ./configure --disable-documentation
+          make -j"$(nproc)"
+
+      - name: Audit repository structure
+        run: |
+          set -euo pipefail
+          ! find . -type d \( -name .idea -o -name .vs \) | grep .
+          ! find . -type f \( -name '*.o' -o -name '*.obj' -o -name '*.exe' \) | grep .
+          test -d libcork/docs/old
