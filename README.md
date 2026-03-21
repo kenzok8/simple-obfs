@@ -8,7 +8,7 @@ Deprecated upstream project. This maintained repository remains available for co
 
 Simple-obfs is a simple obfuscating tool, designed as plugin server of shadowsocks.
 
-Current version: 0.0.10 | [Changelog](Changes)
+Current version: 0.0.11 | [Changelog](Changes)
 
 ## Build
 For Unix-like systems, especially Debian-based systems,
