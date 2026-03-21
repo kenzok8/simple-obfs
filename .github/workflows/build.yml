@@ -14,7 +14,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Install dependencies
-        run: sudo apt-get install -y build-essential autoconf libtool libssl-dev libpcre3-dev libc-ares-dev libev-dev automake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential autoconf libtool libssl-dev libpcre3-dev libc-ares-dev libev-dev automake
 
       - name: autogen
         run: ./autogen.sh

@@ -1,6 +1,8 @@
 # simple-obfs
 
-Deprecated. Followed by [v2ray-plugin](https://github.com/teddysun/v2ray-plugin).
+[![Build](https://github.com/kenzok8/simple-obfs/actions/workflows/build.yml/badge.svg)](https://github.com/kenzok8/simple-obfs/actions/workflows/build.yml)
+
+Deprecated upstream project. This maintained repository remains available for compatibility-focused packaging and build maintenance.
 
 ## Intro
 
