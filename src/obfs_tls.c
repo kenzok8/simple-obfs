@@ -193,6 +193,7 @@ obfs_para_t *obfs_tls = &obfs_tls_st;
 static int
 obfs_app_data(buffer_t *buf, size_t cap, obfs_t *obfs)
 {
+    (void)obfs;
     size_t buf_len = buf->len;
 
     brealloc(buf, buf_len + 5, cap);
@@ -212,7 +213,7 @@ deobfs_app_data(buffer_t *buf, size_t idx, obfs_t *obfs)
 
     frame_t *frame = (frame_t *)obfs->extra;
 
-    while (bidx < buf->len) {
+    while (bidx < (int)buf->len) {
         if (frame->len == 0) {
             if (frame->idx >= 0 && frame->idx < 3
                     && buf->data[bidx] != tls_data_header[frame->idx]) {
@@ -381,6 +382,7 @@ obfs_tls_response(buffer_t *buf, size_t cap, obfs_t *obfs)
 static int
 deobfs_tls_request(buffer_t *buf, size_t cap, obfs_t *obfs)
 {
+    (void)cap;
     if (obfs == NULL || obfs->deobfs_stage < 0) return 0;
 
     if (obfs->extra == NULL) {
@@ -418,7 +420,7 @@ deobfs_tls_request(buffer_t *buf, size_t cap, obfs_t *obfs)
             return OBFS_ERROR;
 
         size_t ticket_len = CT_NTOHS(ticket->session_ticket_ext_len);
-        if (len < ticket_len)
+        if (len < (int)ticket_len)
             return OBFS_NEED_MORE;
 
         memmove(buf->data, (char *)ticket + sizeof(struct tls_ext_session_ticket), ticket_len);
@@ -449,6 +451,7 @@ deobfs_tls_request(buffer_t *buf, size_t cap, obfs_t *obfs)
 static int
 deobfs_tls_response(buffer_t *buf, size_t cap, obfs_t *obfs)
 {
+    (void)cap;
     if (obfs == NULL || obfs->deobfs_stage < 0) return 0;
 
     if (obfs->extra == NULL) {

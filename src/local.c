@@ -131,6 +131,8 @@ setnonblocking(int fd)
 static void
 parent_watcher_cb(EV_P_ ev_timer *watcher, int revents)
 {
+    (void)watcher;
+    (void)revents;
     static int ppid = -1;
 
     int cur_ppid = getppid();
@@ -244,6 +246,7 @@ free_connections(struct ev_loop *loop)
 static void
 server_recv_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server              = server_recv_ctx->server;
     remote_t *remote              = server->remote;
@@ -496,6 +499,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
 static void
 server_send_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     server_ctx_t *server_send_ctx = (server_ctx_t *)w;
     server_t *server              = server_send_ctx->server;
     remote_t *remote              = server->remote;
@@ -534,6 +538,7 @@ server_send_cb(EV_P_ ev_io *w, int revents)
 static void
 remote_timeout_cb(EV_P_ ev_timer *watcher, int revents)
 {
+    (void)revents;
     remote_ctx_t *remote_ctx
         = cork_container_of(watcher, remote_ctx_t, watcher);
 
@@ -551,6 +556,7 @@ remote_timeout_cb(EV_P_ ev_timer *watcher, int revents)
 static void
 remote_recv_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     remote_ctx_t *remote_recv_ctx = (remote_ctx_t *)w;
     remote_t *remote              = remote_recv_ctx->remote;
     server_t *server              = remote->server;
@@ -626,6 +632,7 @@ remote_recv_cb(EV_P_ ev_io *w, int revents)
 static void
 remote_send_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     remote_ctx_t *remote_send_ctx = (remote_ctx_t *)w;
     remote_t *remote              = remote_send_ctx->remote;
     server_t *server              = remote->server;
@@ -912,6 +919,7 @@ signal_cb(EV_P_ ev_signal *w, int revents)
 void
 accept_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     listen_ctx_t *listener = (listen_ctx_t *)w;
     int serverfd           = accept(listener->fd, NULL, NULL);
     if (serverfd == -1) {

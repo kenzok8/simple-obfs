@@ -31,10 +31,11 @@
 int
 parse_options(char *str, size_t str_len, options_t *opts)
 {
-    int i, opt_idx;
+    int opt_idx;
+    size_t pos;
     char p;
 
-    i = 0;
+    pos = 0;
     opt_idx = 0;
     p = '\0';
 
@@ -43,35 +44,35 @@ parse_options(char *str, size_t str_len, options_t *opts)
     opts->keys[0] = str;
 
     while (opt_idx < MAX_OPTION_NUM
-            && i < str_len && str[i] != '\0') {
-        char c = str[i];
+            && pos < str_len && str[pos] != '\0') {
+        char c = str[pos];
         switch (c) {
             case '\\':
-                if (i + 1 == str_len) return -1;
-                memmove(str + i, str + i + 1, str_len - i - 1);
+                if (pos + 1 == str_len) return -1;
+                memmove(str + pos, str + pos + 1, str_len - pos - 1);
                 str_len--;
                 str[str_len] = '\0';
                 break;
             case ';':
                 if (p != '\\') {
-                    str[i] = '\0';
-                    if (i + 1 < str_len) {
+                    str[pos] = '\0';
+                    if (pos + 1 < str_len) {
                         opt_idx++;
-                        opts->keys[opt_idx] = str + i + 1;
+                        opts->keys[opt_idx] = str + pos + 1;
                     }
                 }
-                i++;
+                pos++;
                 break;
             case '=':
                 if (p != '\\') {
-                    if (i + 1 == str_len) return -1;
-                    str[i] = '\0';
-                    opts->values[opt_idx] = str + i + 1;
+                    if (pos + 1 == str_len) return -1;
+                    str[pos] = '\0';
+                    opts->values[opt_idx] = str + pos + 1;
                 }
-                i++;
+                pos++;
                 break;
             default:
-                i++;
+                pos++;
                 break;
         }
         p = c;
@@ -85,7 +86,7 @@ parse_options(char *str, size_t str_len, options_t *opts)
 const char*
 get_opt(const char *key, options_t *opts)
 {
-    int i;
+    size_t i;
     for (i = 0; i < opts->num; i++) {
         if (strcmp(key, opts->keys[i]) == 0) {
             if (opts->values[i] != NULL)

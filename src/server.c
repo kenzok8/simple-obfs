@@ -123,6 +123,8 @@ static struct cork_dllist connections;
 static void
 parent_watcher_cb(EV_P_ ev_timer *watcher, int revents)
 {
+    (void)watcher;
+    (void)revents;
     static int ppid = -1;
 
     int cur_ppid = getppid();
@@ -412,7 +414,7 @@ connect_to_remote(EV_P_ struct addrinfo *res,
             } else {
                 ERROR("sendto");
             }
-        } else if (s <= server->buf->len) {
+        } else if (s <= (ssize_t)server->buf->len) {
             server->buf->idx += s;
             server->buf->len -= s;
         } else {
@@ -541,6 +543,7 @@ perform_handshake(EV_P_ server_t *server)
 static void
 server_recv_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     server_ctx_t *server_recv_ctx = (server_ctx_t *)w;
     server_t *server              = server_recv_ctx->server;
     remote_t *remote              = NULL;
@@ -637,7 +640,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
                     close_and_free_server(EV_A_ server);
                     return;
                 }
-            } else if (s < server->buf->len) {
+            } else if (s < (int)server->buf->len) {
                 server->buf->len -= s;
                 server->buf->idx  = s;
                 ev_io_start(EV_A_ & server->send_ctx->io);
@@ -673,7 +676,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
                 close_and_free_remote(EV_A_ remote);
                 close_and_free_server(EV_A_ server);
             }
-        } else if (s < remote->buf->len) {
+        } else if (s < (int)remote->buf->len) {
             remote->buf->len -= s;
             remote->buf->idx  = s;
             ev_io_stop(EV_A_ & server_recv_ctx->io);
@@ -689,6 +692,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
 static void
 server_send_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     server_ctx_t *server_send_ctx = (server_ctx_t *)w;
     server_t *server              = server_send_ctx->server;
     remote_t *remote              = server->remote;
@@ -718,7 +722,7 @@ server_send_cb(EV_P_ ev_io *w, int revents)
                 close_and_free_server(EV_A_ server);
             }
             return;
-        } else if (s < server->buf->len) {
+        } else if (s < (ssize_t)server->buf->len) {
             // partly sent, move memory, wait for the next time to send
             server->buf->len -= s;
             server->buf->idx += s;
@@ -751,6 +755,7 @@ server_send_cb(EV_P_ ev_io *w, int revents)
 static void
 server_timeout_cb(EV_P_ ev_timer *watcher, int revents)
 {
+    (void)revents;
     server_ctx_t *server_ctx
         = cork_container_of(watcher, server_ctx_t, watcher);
     server_t *server = server_ctx->server;
@@ -767,6 +772,7 @@ server_timeout_cb(EV_P_ ev_timer *watcher, int revents)
 static void
 remote_recv_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     remote_ctx_t *remote_recv_ctx = (remote_ctx_t *)w;
     remote_t *remote              = remote_recv_ctx->remote;
     server_t *server              = remote->server;
@@ -824,7 +830,7 @@ remote_recv_cb(EV_P_ ev_io *w, int revents)
             close_and_free_server(EV_A_ server);
             return;
         }
-    } else if (s < server->buf->len) {
+    } else if (s < (int)server->buf->len) {
         server->buf->len -= s;
         server->buf->idx  = s;
         ev_io_stop(EV_A_ & remote_recv_ctx->io);
@@ -843,6 +849,7 @@ remote_recv_cb(EV_P_ ev_io *w, int revents)
 static void
 remote_send_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     remote_ctx_t *remote_send_ctx = (remote_ctx_t *)w;
     remote_t *remote              = remote_send_ctx->remote;
     server_t *server              = remote->server;
@@ -931,7 +938,7 @@ remote_send_cb(EV_P_ ev_io *w, int revents)
                 close_and_free_server(EV_A_ server);
             }
             return;
-        } else if (s < remote->buf->len) {
+        } else if (s < (ssize_t)remote->buf->len) {
             // partly sent, move memory, wait for the next time to send
             remote->buf->len -= s;
             remote->buf->idx += s;
@@ -1122,6 +1129,7 @@ signal_cb(EV_P_ ev_signal *w, int revents)
 static void
 accept_cb(EV_P_ ev_io *w, int revents)
 {
+    (void)revents;
     listen_ctx_t *listener = (listen_ctx_t *)w;
     int serverfd           = accept(listener->fd, NULL, NULL);
     if (serverfd == -1) {

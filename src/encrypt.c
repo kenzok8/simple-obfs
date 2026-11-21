@@ -33,8 +33,6 @@
 #include "encrypt.h"
 #include "utils.h"
 
-#define OFFSET_ROL(p, o) ((uint64_t)(*(p + o)) << (8 * o))
-
 #ifdef DEBUG
 static void
 dump(char *tag, char *text, int len)
@@ -88,7 +86,7 @@ rand_bytes(void *output, int len)
 
     int i;
     int *array = (int *)output;
-    for (i = 0; i < len / sizeof(int); i++)
+    for (i = 0; i < len / (int)sizeof(int); i++)
         array[i] = rand();
     // always return success
     return 0;

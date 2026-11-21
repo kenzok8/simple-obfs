@@ -140,7 +140,7 @@ read_jconf(const char *file)
 
     buf[pos] = '\0'; // end of string
 
-    json_settings settings = { 0UL, 0, NULL, NULL, NULL };
+    json_settings settings = { 0 };
     char error_buf[512];
     obj = json_parse_ex(&settings, buf, pos, error_buf);
 

@@ -162,6 +162,7 @@ obfs_http_response(buffer_t *buf, size_t cap, obfs_t *obfs)
 static int
 deobfs_http_header(buffer_t *buf, size_t cap, obfs_t *obfs)
 {
+    (void)cap;
     if (obfs == NULL || obfs->deobfs_stage != 0) return 0;
 
     char *data = buf->data;

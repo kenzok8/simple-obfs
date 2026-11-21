@@ -32,22 +32,6 @@
 #define MODULE_LOCAL
 #endif
 
-int init_udprelay(const char *server_host, const char *server_port,
-#ifdef MODULE_LOCAL
-                  const struct sockaddr *remote_addr, const int remote_addr_len,
-#ifdef MODULE_TUNNEL
-                  const ss_addr_t tunnel_addr,
-#endif
-#endif
-                  int mtu, int method, int auth, int timeout, const char *iface);
-
-void free_udprelay(void);
-
-#ifdef ANDROID
-int protect_socket(int fd);
-int send_traffic_stat(uint64_t tx, uint64_t rx);
-#endif
-
 #define STAGE_ERROR     -1  /* Error detected                   */
 #define STAGE_INIT       0  /* Initial stage                    */
 #define STAGE_HANDSHAKE  1  /* Handshake with client            */

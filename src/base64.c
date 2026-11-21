@@ -56,7 +56,7 @@ int base64_decode(uint8_t *out, const char *in, int out_size)
     v = 0;
     for (i = 0; in[i] && in[i] != '='; i++) {
         unsigned int index= in[i]-43;
-        if (index >= sizeof(map2) || map2[index] == 0xff)
+        if (index >= (unsigned int)sizeof(map2) || map2[index] == 0xff)
             return -1;
         v = (v << 6) + map2[index];
         if (i & 3) {
@@ -84,7 +84,7 @@ char *base64_encode(char *out, int out_size, const uint8_t *in, int in_size)
     int i_shift = 0;
     int bytes_remaining = in_size;
 
-    if (in_size >= UINT_MAX / 4 ||
+    if ((unsigned int)in_size >= UINT_MAX / 4 ||
         out_size < BASE64_SIZE(in_size))
         return NULL;
     ret = dst = out;
